@@ -1,0 +1,10 @@
+﻿{
+  "repos": {
+    "lamaran-otomatis": {
+      "nama": "Tools Lamaran Otomatis",
+      "deskripsi": "Otomasi lamaran kerja dari foto lowongan ke pengiriman email",
+      "folder": "repos/lamaran-otomatis",
+      "exclude": [".env", "*.key", "*.pem", "credentials*"]
+    }
+  }
+}

@@ -9,6 +9,7 @@ import VideoSection from './VideoSection'
 import SourceCodeSection from './SourceCodeSection'
 import Lightbox from '../shared/Lightbox'
 import ErrorMessage from '../shared/ErrorMessage'
+import RepoExplorer from '../shared/RepoExplorer'
 
 /**
  * DetailPage — Req 5.1, 5.2, 5.6, 5.7, 6.2
@@ -211,6 +212,14 @@ export default function DetailPage() {
 
       {/* Source Code — SourceCodeSection menangani null/kosong secara internal — Req 9.1, 9.6 */}
       <SourceCodeSection kode={proyek.kode} />
+
+      {/* Repository Explorer — tampil jika proyek punya repoId */}
+      {proyek.repoId && (
+        <section style={styles.section} aria-label="Source Code Repository">
+          <h2 style={styles.sectionHeading}>Jelajahi Source Code</h2>
+          <RepoExplorer repoId={proyek.repoId} />
+        </section>
+      )}
 
       {/* Lightbox — hanya dirender saat isOpen true — Req 8.2, 8.3, 8.4, 8.5 */}
       {lightbox.isOpen && (

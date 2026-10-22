@@ -44,6 +44,7 @@
     ],
     "status": "dalam pengerjaan",
     "path": "https://github.com/dederidwanrifai2-blip/test-model-9router",
+    "repoId": "lamaran-otomatis",
     "thumbnail_url": "./images/workflow.png",
     "galeri": [
       { "url": "./images/workflow.png",       "keterangan": "Tampilan workflow n8n \u2014 alur lengkap dari scan OCR, klasifikasi AI, hingga pengiriman email dan notifikasi Telegram" },
