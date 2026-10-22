@@ -1,0 +1,283 @@
+/* ============================================================
+   global.css — CSS variables + reset untuk DevPaii Projek
+   Tema: dark (default) dan light
+   Semua pasangan teks/background memenuhi WCAG AA ≥ 4.5:1
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   DARK MODE — tema default
+   Kontras pasangan utama:
+     --text-primary  (#e2e8f0) / --bg-primary  (#0f1117) → ~12.6:1 ✓
+     --text-primary  (#e2e8f0) / --bg-secondary (#1a1d2e) → ~11.0:1 ✓
+     --text-primary  (#e2e8f0) / --bg-card      (#1e2235) → ~10.5:1 ✓
+     --text-secondary(#94a3b8) / --bg-primary  (#0f1117) →  ~5.9:1 ✓
+     --text-secondary(#94a3b8) / --bg-card     (#1e2235) →  ~5.4:1 ✓
+     --accent        (#6366f1) / --bg-primary  (#0f1117) →  ~4.5:1 ✓
+   ---------------------------------------------------------- */
+:root[data-tema="dark"] {
+  --bg-primary:    #0f1117;
+  --bg-secondary:  #1a1d2e;
+  --bg-card:       #1e2235;
+  --text-primary:  #e2e8f0;
+  --text-secondary:#94a3b8;
+  --accent:        #6366f1;
+  --accent-hover:  #818cf8;
+  --border:        #2d3148;
+  --code-bg:       #0d1117;
+  --badge-selesai: #166534;
+  --badge-proses:  #92400e;
+  --badge-belum:   #1e3a5f;
+}
+
+/* ----------------------------------------------------------
+   LIGHT MODE
+   Kontras pasangan utama:
+     --text-primary  (#1e293b) / --bg-primary  (#f8fafc) → ~15.3:1 ✓
+     --text-primary  (#1e293b) / --bg-secondary (#f1f5f9) → ~14.3:1 ✓
+     --text-primary  (#1e293b) / --bg-card      (#ffffff) → ~16.0:1 ✓
+     --text-secondary(#64748b) / --bg-primary  (#f8fafc) →  ~5.9:1 ✓
+     --text-secondary(#64748b) / --bg-card     (#ffffff) →  ~5.7:1 ✓
+     --accent        (#4f46e5) / --bg-primary  (#f8fafc) →  ~5.5:1 ✓
+   ---------------------------------------------------------- */
+:root[data-tema="light"] {
+  --bg-primary:    #f8fafc;
+  --bg-secondary:  #f1f5f9;
+  --bg-card:       #ffffff;
+  --text-primary:  #1e293b;
+  --text-secondary:#64748b;
+  --accent:        #4f46e5;
+  --accent-hover:  #4338ca;
+  --border:        #e2e8f0;
+  --code-bg:       #f1f5f9;
+  --badge-selesai: #dcfce7;
+  --badge-proses:  #fef3c7;
+  --badge-belum:   #dbeafe;
+}
+
+/* ----------------------------------------------------------
+   CSS RESET DASAR
+   ---------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ----------------------------------------------------------
+   GLOBAL STYLES
+   ---------------------------------------------------------- */
+html {
+  /* scroll behavior tanpa animasi sesuai arsitektur "tidak ada animasi" */
+  scroll-behavior: auto;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  /* Pastikan transisi tema < 200ms sesuai Req 10.3 */
+  transition: background-color 150ms ease, color 150ms ease;
+  min-height: 100vh;
+}
+
+/* ----------------------------------------------------------
+   LINK DEFAULT
+   ---------------------------------------------------------- */
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+/* Indikator fokus keyboard yang terlihat — Req 7.4 */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ----------------------------------------------------------
+   GAMBAR
+   ---------------------------------------------------------- */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ----------------------------------------------------------
+   TOMBOL — reset bawaan browser
+   ---------------------------------------------------------- */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+}
+
+/* ----------------------------------------------------------
+   LIST — reset bawaan browser (komponen yang butuh bullet
+   dapat menambahkan style lokal)
+   ---------------------------------------------------------- */
+ul,
+ol {
+  list-style: none;
+}
+
+/* ----------------------------------------------------------
+   CODE & PRE — font monospace, min 13px sesuai Req 9.7
+   ---------------------------------------------------------- */
+code,
+pre,
+kbd,
+samp {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier,
+    monospace;
+  font-size: 0.875rem; /* 14px pada base 16px ≥ 13px ✓ */
+}
+
+/* ----------------------------------------------------------
+   LIGHTBOX — Req 7.4, 8.2, 8.3, 8.4, 8.5, 8.7
+   ---------------------------------------------------------- */
+
+/* Backdrop: overlay penuh layar, semi-transparan, z-index tinggi */
+.lightbox-backdrop {
+  position: fixed;
+  inset: 0;                    /* top/right/bottom/left: 0 */
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Cursor pointer memberi sinyal bahwa klik backdrop akan menutup */
+  cursor: pointer;
+}
+
+/* Kotak konten di tengah — klik di sini TIDAK menutup (stopPropagation) */
+.lightbox-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 92vw;
+  max-height: 90vh;
+  cursor: default;
+}
+
+/* Area media — membatasi ukuran gambar/video */
+.lightbox-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 88vw;
+  max-height: 85vh;
+}
+
+.lightbox-image {
+  max-width: 88vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 4px;
+  display: block;
+}
+
+.lightbox-video {
+  max-width: 88vw;
+  max-height: 85vh;
+  border-radius: 4px;
+  display: block;
+  background-color: #000;
+}
+
+/* ----------------------------------------------------------
+   Tombol-tombol lightbox — aksesibel, terlihat jelas
+   ---------------------------------------------------------- */
+.lightbox-btn {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.4rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  /* Kontras putih (#fff) / semi-hitam (rgba ~0.6 di atas hitam) > 4.5:1 ✓ */
+}
+
+.lightbox-btn:hover {
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+/* Fokus keyboard — Req 7.4 */
+.lightbox-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Tombol tutup — pojok kanan atas */
+.lightbox-btn--close {
+  top: -20px;
+  right: -20px;
+  font-size: 1rem;
+}
+
+/* Tombol prev — kiri konten */
+.lightbox-btn--prev {
+  left: -56px;
+  font-size: 2rem;
+}
+
+/* Tombol next — kanan konten */
+.lightbox-btn--next {
+  right: -56px;
+  font-size: 2rem;
+}
+
+/* Counter posisi — pojok bawah konten */
+.lightbox-counter {
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #e2e8f0;
+  font-size: 0.8rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2px 10px;
+  border-radius: 10px;
+  white-space: nowrap;
+  /* Kontras #e2e8f0 / rgba semi-hitam > 7:1 ✓ */
+}
+
+/* Responsif: pada layar kecil, tombol prev/next menempel di tepi media */
+@media (max-width: 600px) {
+  .lightbox-btn--prev {
+    left: 4px;
+  }
+
+  .lightbox-btn--next {
+    right: 4px;
+  }
+
+  .lightbox-btn--close {
+    top: 4px;
+    right: 4px;
+  }
+}

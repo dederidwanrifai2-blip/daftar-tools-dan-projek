@@ -1,0 +1,92 @@
+﻿[
+  {
+    "id": "n8n-otomasi-notifikasi",
+    "nama": "Otomasi Notifikasi n8n",
+    "kategori": "Otomasi",
+    "deskripsi": "Workflow n8n yang mengirim notifikasi otomatis ke Telegram ketika ada event tertentu.",
+    "cara_kerja": "Trigger webhook menerima data, node HTTP Request memvalidasi, node Telegram Bot mengirim pesan.",
+    "masalah_diatasi": "Proses notifikasi manual yang memakan waktu dan sering terlupakan.",
+    "tech_stack": ["n8n", "Telegram Bot API", "Webhook"],
+    "cara_penggunaan": [
+      "Import workflow JSON ke n8n",
+      "Konfigurasi kredensial Telegram Bot",
+      "Aktifkan workflow dan test dengan trigger webhook"
+    ],
+    "status": "selesai",
+    "path": "https://github.com/user/n8n-workflows",
+    "thumbnail_url": null,
+    "galeri": [],
+    "video": [],
+    "kode": [],
+    "info_tambahan": {
+      "versi_n8n": "1.x",
+      "perintah_test": "$ curl -X POST http://localhost:5678/webhook/test"
+    }
+  },
+  {
+    "id": "lamaran-otomatis",
+    "nama": "Tools Lamaran Otomatis",
+    "kategori": "Otomasi",
+    "deskripsi": "Tools otomasi lamaran kerja yang men-scan file foto info lowongan (JPG, JPEG, PNG, dll.) menggunakan OCR, menyortir berdasarkan kriteria user (lokasi, jenjang pendidikan seperti SMK/D3/S1, dll.), lalu membuat draft email lamaran otomatis dengan AI dan mengirimkannya beserta lampiran dokumen (opsional, contoh: CV, ijazah, transkrip nilai). Notifikasi dikirim via Telegram setelah email terkirim.",
+    "cara_kerja": "Foto lowongan di-scan dengan OCR untuk diekstrak menjadi teks, kemudian diklasifikasikan oleh AI berdasarkan kriteria user. Lowongan yang lolos dan memiliki email tujuan akan dibuatkan draft lamaran otomatis oleh AI, digabungkan dengan lampiran dokumen, lalu dikirim via Gmail. Setelah terkirim, bot Telegram mengirim notifikasi ke user.",
+    "masalah_diatasi": "Pencari kerja sering menerima info lowongan dalam bentuk foto yang banyak sekaligus, biasanya dari grup WhatsApp atau Telegram. Mereka harus menyortir manual mana yang sesuai kriteria (lokasi, jenjang pendidikan, dll.), lalu mengirim lamaran satu per satu via email — proses yang memakan banyak waktu dan tenaga. Tools ini mengotomasi seluruh alur: scan foto → sortir → buat draft → kirim email → notifikasi Telegram.",
+    "tech_stack": ["n8n", "Python", "OCR (Tesseract)", "AI Router (9 model)", "Gmail API", "Telegram Bot API"],
+    "cara_penggunaan": [
+      "Setup: Buat struktur folder — masuk/, selesai/, json/, hasil_klasifikasi/, pdf/, dan folder gagal/ (berisi subfolder: gagal kebaca/, tidak ada email/, tidak memenuhi kriteria/, dan subfolder per jenjang pendidikan misal s1 sederajat/)",
+      "Setup: Install dan konfigurasi OCR (Tesseract) lalu sesuaikan path di ocr_job.py",
+      "Setup: Atur kriteria penyortiran di workflow n8n (contoh: lokasi kota, jenjang pendidikan SMK/D3/S1)",
+      "Setup: Buat prompt untuk draft email lamaran di node AI dalam workflow",
+      "Setup: Konfigurasi kredensial akun email pengirim dan bot Telegram di n8n",
+      "Setup (opsional): Letakkan dokumen lampiran ke folder pdf/ sesuai kebutuhan (contoh: CV.pdf, IJAZAH.pdf, TRANSKRIP NILAI.pdf)",
+      "Jalankan: Masukkan file foto lowongan ke folder masuk/",
+      "Jalankan: Execute workflow di n8n",
+      "Jalankan: Cek hasil di folder masing-masing — selesai/ untuk yang terkirim, gagal/ untuk yang tidak lolos sortir"
+    ],
+    "status": "dalam pengerjaan",
+    "path": "https://github.com/dederidwanrifai2-blip/test-model-9router",
+    "thumbnail_url": "./images/workflow.png",
+    "galeri": [
+      { "url": "./images/workflow.png",       "keterangan": "Tampilan workflow n8n \u2014 alur lengkap dari scan OCR, klasifikasi AI, hingga pengiriman email dan notifikasi Telegram" },
+      { "url": "./images/folder.png",         "keterangan": "Struktur folder kerja \u2014 folder masuk/ sebagai input, selesai/ untuk yang terkirim, gagal/ berisi subfolder hasil sortiran, dan pdf/ untuk lampiran dokumen" },
+      { "url": "./images/draft-email.png",    "keterangan": "Contoh hasil draft email lamaran yang dibuat otomatis oleh AI \u2014 berisi perkenalan, pengalaman relevan, dan daftar lampiran" },
+      { "url": "./images/notif-telegram.png", "keterangan": "Notifikasi Telegram dari Hermes Bot setelah lamaran berhasil dikirim \u2014 menampilkan posisi, perusahaan, email tujuan, dan lampiran yang disertakan" }
+    ],
+    "video": [],
+    "kode": [
+      {
+        "nama_file": "Struktur Folder & File",
+        "bahasa": "bash",
+        "isi": "lamar-otomatis/\n\u2502\n\u2502   ocr_job.py              # Script utama OCR \u2014 membaca foto lowongan dan mengekstrak teks\n\u2502   deteksi_pendidikan.py   # Script klasifikasi \u2014 mendeteksi jenjang pendidikan dari teks OCR\n\u2502\n\u251c\u2500\u2500\u2500masuk/                  # INPUT \u2014 taruh semua foto lowongan di sini sebelum dijalankan\n\u2502\n\u251c\u2500\u2500\u2500json/                   # Hasil OCR mentah \u2014 setiap foto menghasilkan 1 file JSON berisi teks\n\u2502\n\u251c\u2500\u2500\u2500hasil_klasifikasi/      # Hasil klasifikasi \u2014 JSON dengan info: email, pendidikan, lokasi\n\u2502\n\u251c\u2500\u2500\u2500selesai/                # Foto lowongan yang emailnya sudah berhasil dikirim\n\u2502\n\u251c\u2500\u2500\u2500pdf/                    # Dokumen lampiran (opsional)\n\u2502       CV.pdf              #   Contoh: Curriculum Vitae\n\u2502       IJAZAH.pdf          #   Contoh: Ijazah pendidikan terakhir\n\u2502       TRANSKRIP NILAI.pdf #   Contoh: Transkrip nilai akademik\n\u2502\n\u2514\u2500\u2500\u2500gagal/                  # Foto yang tidak lolos, dibagi ke subfolder:\n    \u251c\u2500\u2500\u2500gagal kebaca/        #   Foto buram atau OCR gagal membaca\n    \u251c\u2500\u2500\u2500tidak ada email/     #   Lowongan tanpa email (isi manual, masih pengembangan)\n    \u251c\u2500\u2500\u2500tidak memenuhi kriteria/ # Tidak sesuai kriteria yang diatur user\n    \u2514\u2500\u2500\u2500s1 sederajat/        #   Contoh subfolder per jenjang pendidikan"
+      }
+    ],
+    "info_tambahan": {
+      "alur_kerja": "masuk/ \u2192 OCR (ocr_job.py) \u2192 json/ \u2192 Klasifikasi AI \u2192 hasil_klasifikasi/ \u2192 Cek email + kriteria \u2192 Buat draft \u2192 Kirim Gmail \u2192 Notif Telegram \u2192 selesai/",
+      "file_python": "ocr_job.py: OCR utama | deteksi_pendidikan.py: deteksi jenjang pendidikan",
+      "subfolder_gagal": "gagal kebaca/ | tidak ada email/ | tidak memenuhi kriteria/ | subfolder per jenjang (misal: s1 sederajat/)",
+      "lampiran_pdf": "Opsional \u2014 letakkan file PDF di folder pdf/ sesuai kebutuhan (CV, ijazah, transkrip, dll.)",
+      "catatan": "Fitur untuk lowongan tanpa email (isi manual) masih dalam tahap pengembangan"
+    }
+  },
+  {
+    "id": "devpaii-router",
+    "nama": "DevPaii Router",
+    "kategori": "Produksi",
+    "deskripsi": "Platform web terpadu untuk mengelola dan memonitor berbagai model AI dari satu dashboard.",
+    "cara_kerja": "Frontend React berkomunikasi dengan API gateway yang meneruskan request ke berbagai provider AI.",
+    "masalah_diatasi": "Kebutuhan berpindah-pindah antara berbagai platform AI yang tidak efisien.",
+    "tech_stack": ["React", "Vite", "CSS Variables"],
+    "cara_penggunaan": [
+      "Clone repository",
+      "Jalankan npm install",
+      "Konfigurasi API keys di file .env",
+      "Jalankan npm run dev"
+    ],
+    "status": "dalam pengerjaan",
+    "path": "https://github.com/user/devpaii-router",
+    "thumbnail_url": null,
+    "galeri": [],
+    "video": [],
+    "kode": [],
+    "info_tambahan": {}
+  }
+]
